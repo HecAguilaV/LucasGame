@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="description" content="Lucas: Level 18 - Un juego especial para tu mayoría de edad">
+    <title>Lucas: Level 18 🎮</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="ui-layer">
+        <div class="ui-section">
+            <div class="ui-label">LUCAS</div>
+            <div style="font-size: clamp(8px, 2vw, 10px); color: #aaa; margin-top: 5px;">NIVEL 18</div>
+        </div>
+        <div class="ui-section" style="text-align: right;">
+            <div class="ui-label">EXP</div>
+            <div id="score-display" class="ui-value">0</div>
+        </div>
+    </div>
+
+    <div id="progress-bar"></div>
+
+    <div id="rotate-notice">📱 Gira el celular para jugar mejor 📱</div>
+
+    <div id="start-screen">
+        <h1>NIVEL 18<br>DESBLOQUEADO</h1>
+        <p class="subtitle">
+            La vida no es fácil.<br>
+            Hay obstáculos y caídas.<br>
+            Pero siempre puedes saltar.<br><br>
+            <span style="color: #00d2ff;">29 de Noviembre, 2025</span>
+        </p>
+        <button id="start-btn">EMPEZAR EL RETO</button>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="message-modal">
+        <p id="modal-content" class="modal-text"></p>
+        <div id="modal-actions"></div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

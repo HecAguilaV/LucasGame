@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+* {
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #0d0d2e 0%, #1a0d3d 50%, #0d0d2e 100%);
+    color: white;
+    font-family: 'Press Start 2P', cursive;
+    overflow: hidden;
+    touch-action: none;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+}
+
+#ui-layer {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    pointer-events: none;
+    z-index: 10;
+    text-shadow: 2px 2px 0 #000, 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.ui-section {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ui-label {
+    color: #6c5ce7;
+    font-size: clamp(10px, 2.5vw, 14px);
+    text-shadow: 0 0 10px #6c5ce7, 0 0 20px #8b5cf6;
+}
+
+.ui-value {
+    font-size: clamp(12px, 3vw, 16px);
+    color: #fff;
+}
+
+#score-display {
+    color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff, 0 0 20px #6c5ce7;
+}
+
+/* Pantalla Inicio */
+#start-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(13, 13, 46, 0.98) 0%, rgba(26, 13, 61, 0.98) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    text-align: center;
+    padding: 20px;
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+h1 {
+    color: #6c5ce7;
+    font-size: clamp(20px, 5vw, 40px);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px #6c5ce7, 0 0 30px #8b5cf6, 2px 2px 0 #000;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 20px #6c5ce7, 0 0 30px #8b5cf6, 2px 2px 0 #000; }
+    to { text-shadow: 0 0 30px #6c5ce7, 0 0 40px #8b5cf6, 0 0 50px #00d4ff, 2px 2px 0 #000; }
+}
+
+.subtitle {
+    font-size: clamp(10px, 2.5vw, 14px);
+    color: #aaa;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    max-width: 600px;
+}
+
+#start-btn {
+    background: linear-gradient(135deg, #ff0055 0%, #ff3366 100%);
+    color: #fff;
+    border: 4px solid #fff;
+    padding: 20px 40px;
+    font-family: inherit;
+    font-size: clamp(12px, 3vw, 16px);
+    cursor: pointer;
+    margin-top: 20px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 0 30px rgba(255, 0, 85, 0.5), 0 4px 0 rgba(255, 255, 255, 0.3);
+    transition: all 0.2s;
+    animation: pulse 1.5s infinite;
+}
+
+#start-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 0, 85, 0.7), 0 6px 0 rgba(255, 255, 255, 0.3);
+}
+
+#start-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.5), 0 2px 0 rgba(255, 255, 255, 0.3);
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Modal Mensajes */
+#message-modal {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, rgba(13, 13, 46, 0.98) 0%, rgba(26, 13, 61, 0.98) 100%);
+    border: 4px solid #6c5ce7;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    z-index: 100;
+    border-radius: 15px;
+    box-shadow: 0 0 60px rgba(108, 92, 231, 0.4), inset 0 0 30px rgba(139, 92, 246, 0.1);
+    animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.modal-text {
+    font-size: clamp(11px, 3.5vw, 14px);
+    line-height: 2;
+    margin-bottom: 30px;
+    color: #eee;
+    white-space: pre-line;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.action-btn {
+    background: linear-gradient(135deg, #6c5ce7 0%, #8b5cf6 100%);
+    color: #000;
+    border: none;
+    padding: 18px;
+    width: 100%;
+    font-family: inherit;
+    cursor: pointer;
+    font-size: clamp(10px, 2.5vw, 12px);
+    border-radius: 8px;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 0 #4c3fb0, 0 0 20px rgba(108, 92, 231, 0.3);
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #4c3fb0, 0 0 30px rgba(108, 92, 231, 0.5);
+}
+
+.action-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #4c3fb0, 0 0 15px rgba(108, 92, 231, 0.3);
+}
+
+/* Botón especial WhatsApp */
+.wa-btn {
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    margin-top: 15px;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 4px 0 #0d6b5f, 0 0 20px rgba(37, 211, 102, 0.3);
+}
+
+.wa-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #0d6b5f, 0 0 30px rgba(37, 211, 102, 0.5);
+}
+
+.wa-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #0d6b5f, 0 0 15px rgba(37, 211, 102, 0.3);
+}
+
+#rotate-notice {
+    display: none;
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    color: #ffe600;
+    font-size: clamp(8px, 2vw, 10px);
+    z-index: 40;
+    animation: blink 2s infinite;
+    text-shadow: 0 0 10px #ffe600, 2px 2px 0 #000;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* Efectos de partículas */
+.particle {
+    position: absolute;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Barra de progreso */
+#progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #6c5ce7, #00d4ff);
+    width: 0%;
+    transition: width 0.3s ease;
+    z-index: 20;
+    box-shadow: 0 0 10px rgba(108, 92, 231, 0.5);
+}
