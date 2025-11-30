@@ -98,20 +98,6 @@ body {
     pointer-events: auto;
 }
 
-#start-screen h1 {
-    width: 100%;
-    max-width: 100%;
-    text-align: center;
-}
-
-#start-screen .subtitle {
-    width: 100%;
-    max-width: 600px;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
