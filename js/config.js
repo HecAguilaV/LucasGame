@@ -4,12 +4,23 @@
  */
 
 // ==========================================
-// CONFIGURACIÓN: PON TU NÚMERO AQUÍ
+// CONFIGURACIÓN PRIVADA (Número de teléfono)
 // ==========================================
+// El número de teléfono se carga de forma segura:
+// 1. Primero intenta desde variable de entorno (Vercel) - VERCEL_PHONE_NUMBER
+// 2. Si no existe, intenta desde config.private.js (desarrollo local)
+// 3. Si no existe, será undefined
+
+// Obtener número de teléfono
+// Se carga dinámicamente desde:
+// 1. API endpoint /api/config (en Vercel/producción) - lee variable de entorno VERCEL_PHONE_NUMBER
+// 2. config.private.js (en desarrollo local)
+let phoneNumber = undefined;
+
 export const CONFIG = {
-    // Número de teléfono para WhatsApp (sin +, sin espacios)
-    // Ejemplo: "56912345678"
-    PHONE_NUMBER: "56929868218",
+    // Número de teléfono para WhatsApp
+    // Se actualiza dinámicamente en ui.js desde API o archivo privado
+    PHONE_NUMBER: phoneNumber,
     
     // Configuración del juego
     GAME_SPEED: 4,

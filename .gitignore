@@ -5,6 +5,10 @@ node_modules/
 server.js
 package.json
 
+# Configuración privada (NO SUBIR A GIT)
+js/config.private.js
+.env
+
 # Archivos del sistema
 .DS_Store
 Thumbs.db

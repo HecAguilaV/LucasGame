@@ -91,22 +91,41 @@ Si usas VS Code:
 
 ## 🚀 Cómo desplegar en Vercel
 
-1. **Configura tu número de teléfono:**
-   - Abre `js/config.js`
-   - Busca la línea: `PHONE_NUMBER: "569XXXXXXXX",`
-   - Reemplaza con tu número (formato: código país + número, sin + ni espacios)
-   - Ejemplo: `PHONE_NUMBER: "56912345678",` para Chile
-
-2. **Sube a Vercel:**
+1. **Sube tu proyecto a Vercel:**
    - Ve a [vercel.com](https://vercel.com)
    - Inicia sesión o crea una cuenta
    - Haz clic en "Add New Project"
-   - Conecta tu repositorio o arrastra la carpeta del proyecto
+   - Conecta tu repositorio de GitHub o arrastra la carpeta del proyecto
    - Vercel detectará automáticamente la configuración
    - Haz clic en "Deploy"
 
-3. **¡Listo!**
+2. **Configura tu número de teléfono:**
+   
+   **Opción A: Importar archivo .env (RECOMENDADO):**
+   - En Vercel, en la sección "Environment Variables"
+   - Haz clic en **"Import .env"**
+   - Selecciona el archivo `.env` de tu proyecto (ya está creado con tu número)
+   - ⚠️ **IMPORTANTE:** El nombre de la variable debe ser `PHONE_NUMBER` (NO `VERCEL_PHONE_NUMBER` porque Vercel reserva nombres con "VERCEL")
+   - El archivo `.env` debe contener:
+     ```
+     PHONE_NUMBER=56929868218
+     ```
+   - Luego impórtalo en Vercel
+   - ✅ **Esta es la forma más fácil y funciona perfectamente**
+   
+   **Opción B: Usar archivo JSON (Alternativa):**
+   - El número ya está en `public/config.json`
+   - Funciona automáticamente sin configuración adicional
+   - Si prefieres, puedes editar ese archivo directamente
+
+3. **Para desarrollo local:**
+   - Copia `js/config.private.example.js` y renómbralo a `js/config.private.js`
+   - Abre `js/config.private.js` y coloca tu número real
+   - ⚠️ **El archivo `config.private.js` está en `.gitignore` y NO se subirá a GitHub**
+
+4. **¡Listo!**
    - Vercel te dará una URL única
+   - El botón de WhatsApp funcionará con tu número configurado
    - Comparte el link con Lucas por correo electrónico
 
 ## 📱 Uso
@@ -147,6 +166,12 @@ Modifica el objeto `COLORS` en `CONFIG` dentro de `js/config.js`. El juego actua
 - **Cian brillante** (`#00d4ff`) - Acentos y efectos
 - **Rosa neón** (`#ff6b9d`) - Pinchos y elementos de peligro
 - **Fondo azul oscuro** - Ambiente espacial profundo
+
+### Configurar número de teléfono (Privado)
+1. Copia `js/config.private.example.js` y renómbralo a `js/config.private.js`
+2. Abre `js/config.private.js` y coloca tu número real
+3. El archivo `config.private.js` está en `.gitignore` y NO se subirá a Git
+4. Esto mantiene tu información privada segura
 
 ### Cambiar imágenes del personaje
 Reemplaza los archivos en `static/`:

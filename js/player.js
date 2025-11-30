@@ -44,8 +44,8 @@ export class Player {
             }
         };
         
-        this.babyLucasImg.src = 'static/BabyLucas.jpg';
-        this.youngLucasImg.src = 'static/YoungLucas.jpg';
+        this.babyLucasImg.src = '/static/BabyLucas.jpg';
+        this.youngLucasImg.src = '/static/YoungLucas.jpg';
     }
 
     /**

@@ -7,6 +7,60 @@ import { CONFIG, STORY_MESSAGES, FAIL_MESSAGES } from './config.js';
 
 let isPaused = false;
 
+// Cargar número de teléfono (prioridad: API de Vercel > archivo privado local)
+(async () => {
+    // Si ya está configurado desde variable de entorno, no hacer nada
+    if (CONFIG.PHONE_NUMBER) {
+        return;
+    }
+    
+    // En producción (Vercel), intentar cargar desde API o archivo JSON
+    const isProduction = window.location.hostname !== 'localhost' && 
+                         window.location.hostname !== '127.0.0.1' &&
+                         !window.location.hostname.startsWith('192.168.');
+    
+    if (isProduction) {
+        // Intentar primero desde API (variable de entorno)
+        try {
+            const response = await fetch('/api/config');
+            if (response.ok) {
+                const data = await response.json();
+                if (data.phoneNumber) {
+                    CONFIG.PHONE_NUMBER = data.phoneNumber;
+                    return;
+                }
+            }
+        } catch (e) {
+            // Si falla la API, intentar desde archivo JSON
+            try {
+                const jsonResponse = await fetch('/config.json');
+                if (jsonResponse.ok) {
+                    const jsonData = await jsonResponse.json();
+                    if (jsonData.phoneNumber) {
+                        CONFIG.PHONE_NUMBER = jsonData.phoneNumber;
+                        return;
+                    }
+                }
+            } catch (e2) {
+                console.warn('No se pudo cargar el número. Configura VERCEL_PHONE_NUMBER en Vercel o edita /config.json');
+            }
+        }
+    }
+    
+    // En desarrollo local, intentar cargar desde archivo privado
+    try {
+        const privateConfig = await import('./config.private.js');
+        if (privateConfig.PRIVATE_CONFIG?.PHONE_NUMBER) {
+            CONFIG.PHONE_NUMBER = privateConfig.PRIVATE_CONFIG.PHONE_NUMBER;
+        }
+    } catch (e) {
+        // Archivo privado no existe
+        if (!isProduction) {
+            console.warn('config.private.js no encontrado. Crea el archivo basándote en config.private.example.js');
+        }
+    }
+})();
+
 /**
  * Muestra un modal con un mensaje
  */
@@ -20,13 +74,16 @@ export function showModal(text, isDeath, isFinal) {
     actions.innerHTML = "";
 
     if (isFinal) {
-        // Botón WhatsApp
-        const btn = document.createElement('a');
-        btn.className = "action-btn wa-btn";
-        btn.innerText = "💬 HABLAR CON PAPÁ";
-        btn.href = `https://wa.me/${CONFIG.PHONE_NUMBER}?text=Hola%20pa,%20llegué%20al%20final%20del%20juego.%20Gracias%20por%20todo.`;
-        btn.target = "_blank";
-        actions.appendChild(btn);
+        // Botón WhatsApp (solo si el número está configurado)
+        const currentPhone = CONFIG.PHONE_NUMBER;
+        if (currentPhone && currentPhone !== "CONFIGURAR_EN_PRIVATE") {
+            const btn = document.createElement('a');
+            btn.className = "action-btn wa-btn";
+            btn.innerText = "💬 HABLAR CON PAPÁ";
+            btn.href = `https://wa.me/${currentPhone}?text=Hola%20pa,%20llegué%20al%20final%20del%20juego.%20Gracias%20por%20todo.`;
+            btn.target = "_blank";
+            actions.appendChild(btn);
+        }
 
         // Botón para reiniciar
         const restartBtn = document.createElement('button');
