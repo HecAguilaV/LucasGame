@@ -114,7 +114,7 @@ export function showModal(text, isDeath, isFinal) {
                 btn.className = "action-btn";
                 btn.style.background = "linear-gradient(135deg, #ff0055 0%, #ff3366 100%)";
                 btn.style.color = "white";
-                btn.innerText = isInfinite ? "CONTINUAR (∞ VIDAS)" : `CONTINUAR (${livesText} vidas restantes)`;
+                btn.innerText = isInfinite ? "CONTINUAR VIDAS INFINITAS" : `CONTINUAR (${livesText} vidas restantes)`;
                     btn.onclick = () => {
                         modal.style.display = 'none';
                         isPaused = false;
