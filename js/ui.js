@@ -279,14 +279,18 @@ export function initUI() {
 
     // Ajustar aviso de rotación
     function checkOrientation() {
-        if (window.innerHeight > window.innerWidth) {
-            rotateNotice.style.display = 'block';
-        } else {
-            rotateNotice.style.display = 'none';
+        if (rotateNotice) {
+            if (window.innerHeight > window.innerWidth) {
+                rotateNotice.style.display = 'block';
+            } else {
+                rotateNotice.style.display = 'none';
+            }
         }
     }
 
-    window.addEventListener('resize', checkOrientation);
+    if (window.addEventListener) {
+        window.addEventListener('resize', checkOrientation);
+    }
     checkOrientation();
 
     return {

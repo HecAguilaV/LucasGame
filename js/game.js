@@ -47,6 +47,8 @@ export class Game {
         this.cameraX = 0;
         this.score = 0;
         updateLives(this.lives);
+        // Habilitar eventos en el canvas cuando el juego inicia
+        this.canvas.classList.add('game-running');
         this.loop();
     }
 
@@ -258,6 +260,7 @@ export class Game {
             
             modal.style.display = 'block';
         }
+        */
     }
 
     /**

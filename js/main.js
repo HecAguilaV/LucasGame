@@ -15,28 +15,41 @@ initMeteors();
 const canvas = document.getElementById('gameCanvas');
 const game = new Game(canvas);
 
-// Inicializar UI
-const { startScreen, startBtn } = initUI();
-
-// Inicializar juego
+// Inicializar juego primero
 game.init();
+
+// Inicializar UI después
+const { startScreen, startBtn } = initUI();
 
 // Configurar controles
 function jump() {
-    game.handleJump();
+    if (game.gameRunning) {
+        game.handleJump();
+    }
 }
 
-// Solo prevenir default en touchstart si NO es el botón de inicio
+// Solo prevenir default en touchstart si NO es el botón de inicio o la pantalla de inicio
 window.addEventListener('touchstart', (e) => {
-    // No prevenir si es el botón de inicio o un elemento interactivo
-    if (e.target.id === 'start-btn' || e.target.closest('#start-screen') || e.target.closest('.action-btn')) {
+    // No prevenir si es el botón de inicio, la pantalla de inicio o un elemento interactivo
+    if (e.target.id === 'start-btn' || 
+        e.target.closest('#start-screen') || 
+        e.target.closest('#start-btn') ||
+        e.target.closest('.action-btn') ||
+        !game.gameRunning) {
         return;
     }
     e.preventDefault();
     jump();
 }, { passive: false });
 
-window.addEventListener('mousedown', jump);
+// Solo saltar con mousedown si el juego está corriendo
+window.addEventListener('mousedown', (e) => {
+    // No saltar si es el botón de inicio o la pantalla de inicio
+    if (e.target.id === 'start-btn' || e.target.closest('#start-screen') || !game.gameRunning) {
+        return;
+    }
+    jump();
+});
 
 window.addEventListener('keydown', (e) => {
     if (e.code === 'Space' || e.code === 'ArrowUp') {
@@ -45,16 +58,51 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
-// Botón de inicio - Soporte para móvil y desktop
+// Botón de inicio - Función simple y directa
 function startGame(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    startScreen.style.display = 'none';
-    game.start();
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+    }
+    console.log('Botón de inicio presionado');
+    if (startScreen) {
+        startScreen.style.display = 'none';
+    }
+    if (game) {
+        game.start();
+    }
 }
 
-startBtn.addEventListener('click', startGame);
-startBtn.addEventListener('touchstart', startGame, { passive: false });
+// Configurar botón de inicio de forma simple y directa
+if (startBtn) {
+    // Usar onclick directo (más confiable)
+    startBtn.onclick = startGame;
+    
+    // También agregar listeners de eventos para móvil
+    startBtn.addEventListener('click', startGame, true);
+    startBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        startGame(e);
+    }, { passive: false, capture: true });
+} else {
+    console.error('startBtn no encontrado');
+    // Reintentar después de un momento
+    setTimeout(() => {
+        const btn = document.getElementById('start-btn');
+        if (btn) {
+            btn.onclick = startGame;
+            btn.addEventListener('click', startGame, true);
+            btn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                startGame(e);
+            }, { passive: false, capture: true });
+        }
+    }, 500);
+}
 
 // Prevenir scroll en móviles
 document.addEventListener('touchmove', (e) => {
