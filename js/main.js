@@ -26,7 +26,12 @@ function jump() {
     game.handleJump();
 }
 
+// Solo prevenir default en touchstart si NO es el botón de inicio
 window.addEventListener('touchstart', (e) => {
+    // No prevenir si es el botón de inicio o un elemento interactivo
+    if (e.target.id === 'start-btn' || e.target.closest('#start-screen') || e.target.closest('.action-btn')) {
+        return;
+    }
     e.preventDefault();
     jump();
 }, { passive: false });
@@ -40,12 +45,16 @@ window.addEventListener('keydown', (e) => {
     }
 });
 
-// Botón de inicio
-startBtn.addEventListener('click', (e) => {
+// Botón de inicio - Soporte para móvil y desktop
+function startGame(e) {
+    e.preventDefault();
     e.stopPropagation();
     startScreen.style.display = 'none';
     game.start();
-});
+}
+
+startBtn.addEventListener('click', startGame);
+startBtn.addEventListener('touchstart', startGame, { passive: false });
 
 // Prevenir scroll en móviles
 document.addEventListener('touchmove', (e) => {

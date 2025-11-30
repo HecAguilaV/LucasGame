@@ -115,6 +115,14 @@ h1 {
     box-shadow: 0 0 30px rgba(255, 0, 85, 0.5), 0 4px 0 rgba(255, 255, 255, 0.3);
     transition: all 0.2s;
     animation: pulse 1.5s infinite;
+    /* Asegurar que funcione en móvil */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(255, 0, 85, 0.3);
+    pointer-events: auto;
+    z-index: 100;
+    position: relative;
+    min-height: 50px;
+    min-width: 200px;
 }
 
 #start-btn:hover {
