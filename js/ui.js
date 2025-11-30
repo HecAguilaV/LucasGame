@@ -165,6 +165,19 @@ export function setIsPaused(value) {
 /**
  * Muestra un mensaje de fallo aleatorio
  */
+/**
+ * Muestra el mensaje inicial al comenzar el juego
+ */
+export function showInitialMessage() {
+    const message = "⚠️ IMPORTANTE ⚠️\n\n" +
+                   "Es necesario caer y chocar\n" +
+                   "con los obstáculos...\n\n" +
+                   "Para que se visualicen\n" +
+                   "los mensajes también 😄\n\n" +
+                   "Al buen entendedor...";
+    showModal(message, false, false);
+}
+
 export function showFailMessage() {
     const msg = FAIL_MESSAGES[Math.floor(Math.random() * FAIL_MESSAGES.length)];
     showModal(msg, true, false);

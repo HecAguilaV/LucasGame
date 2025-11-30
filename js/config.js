@@ -31,7 +31,7 @@ export const CONFIG = {
     // Configuración del jugador
     PLAYER: {
         SIZE: 25,
-        JUMP_POWER: -16, // Aumentado aún más para saltar más lejos
+        JUMP_POWER: -18, // Aumentado para saltar más lejos y cruzar gaps más fácilmente
         MAX_TRAIL_LENGTH: 15
     },
     

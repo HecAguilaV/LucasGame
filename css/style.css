@@ -98,7 +98,8 @@ body {
     pointer-events: auto;
 }
 
-#start-screen > * {
+#start-screen h1,
+#start-screen .subtitle {
     width: 100%;
     max-width: 100%;
 }
@@ -138,7 +139,7 @@ h1 {
     font-family: inherit;
     font-size: clamp(12px, 3vw, 16px);
     cursor: pointer;
-    margin: 20px auto 0 auto;
+    margin: 20px 0 0 0;
     border-radius: 8px;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -153,10 +154,10 @@ h1 {
     position: relative;
     min-height: 50px;
     min-width: 200px;
-    /* Asegurar que esté centrado */
-    display: block;
+    /* Asegurar que esté centrado - flexbox lo centrará automáticamente */
     width: auto;
-    max-width: 100%;
+    max-width: 90%;
+    align-self: center;
 }
 
 #start-btn:hover {

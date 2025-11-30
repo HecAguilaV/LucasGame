@@ -7,7 +7,7 @@ import { CONFIG } from './config.js';
 import { Player } from './player.js';
 import { initLevel, getPlatforms, getSpikes, getRamps, drawBackground, drawPlatforms, drawSpikes, drawRamps, drawPortal } from './level.js';
 import { updateParticles, drawParticles, createConfetti, createJumpParticles } from './particles.js';
-import { showFailMessage, checkStoryMessages, updateProgressBar, updateScore, getIsPaused, setIsPaused, updateLives } from './ui.js';
+import { showFailMessage, showInitialMessage, checkStoryMessages, updateProgressBar, updateScore, getIsPaused, setIsPaused, updateLives } from './ui.js';
 
 export class Game {
     constructor(canvas) {
@@ -49,6 +49,8 @@ export class Game {
         updateLives(this.lives);
         // Habilitar eventos en el canvas cuando el juego inicia
         this.canvas.classList.add('game-running');
+        // Mostrar mensaje inicial
+        showInitialMessage();
         this.loop();
     }
 

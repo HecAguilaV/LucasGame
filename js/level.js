@@ -76,8 +76,8 @@ export function initLevel(canvasHeight) {
         // No poner gaps muy cerca de mensajes
         const nearMessage = STORY_MESSAGES.some(m => Math.abs(m.x - currentX) < 500); // Reducido de 600 a 500
 
-        // Gap (hueco) - Muy reducido para que sea fácilmente saltable
-        let gap = (!isSafeZone && !nearMessage && Math.random() > 0.75) ? 50 + Math.random() * 40 : 0; // Máximo 90px
+        // Gap (hueco) - Reducido para que sea fácilmente saltable
+        let gap = (!isSafeZone && !nearMessage && Math.random() > 0.75) ? 30 + Math.random() * 30 : 0; // Máximo 60px (reducido de 90px)
 
         let width = 400 + Math.random() * 400;
         let y = canvasHeight - 100;
@@ -124,12 +124,12 @@ export function initLevel(canvasHeight) {
                 }
             }
 
-            // Si acabamos de pasar un gap, poner una plataforma flotante de ayuda
-            if (isAfterGap && Math.random() > 0.3) {
+            // Si acabamos de pasar un gap, poner una plataforma flotante de ayuda (más frecuente)
+            if (isAfterGap && Math.random() > 0.2) { // Aumentado de 0.3 a 0.2 (80% de probabilidad)
                 platforms.push({
-                    x: currentX + 100,
+                    x: currentX + 80, // Más cerca del gap
                     y: y - 120 - Math.random() * 30,
-                    w: 140 + Math.random() * 60,
+                    w: 160 + Math.random() * 60, // Más ancha
                     h: 20,
                     type: 'float'
                 });
