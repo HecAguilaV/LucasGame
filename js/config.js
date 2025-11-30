@@ -81,7 +81,7 @@ export const STORY_MESSAGES = [
         x: 10000,
         shown: false,
         isFinal: true,
-        text: "Hola hijo... te amo. Te extraño.\n\nPerdón por mis errores\ny cuenta con mi apoyo para lo que sea.\n\nTe espero en casita\npara nuevos proyectos.\n\n🏠 Tu papá"
+        text: "Esta meta no es el final.\nEs tu PUNTO DE PARTIDA.\n\nHola hijo... te amo. Te extraño.\n\nPerdón por mis errores\ny cuenta con mi apoyo para lo que sea.\n\nTe espero en casita\npara nuevos proyectos.\n\n🏠 Tu papá"
     }
 ];
 
