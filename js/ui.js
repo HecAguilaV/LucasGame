@@ -171,10 +171,7 @@ export function setIsPaused(value) {
 export function showInitialMessage() {
     const message = "⚠️ IMPORTANTE ⚠️\n\n" +
                    "Es necesario caer y chocar\n" +
-                   "con los obstáculos...\n\n" +
-                   "Para que se visualicen\n" +
-                   "los mensajes también 😄\n\n" +
-                   "Al buen entendedor...";
+                   "con los obstáculos...\n\n";
     showModal(message, false, false);
 }
 
