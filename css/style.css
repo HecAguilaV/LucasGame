@@ -336,3 +336,37 @@ h1 {
     display: none;
     font-family: 'Press Start 2P', cursive;
 }
+
+/* Footer */
+#game-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px 20px;
+    background: linear-gradient(180deg, transparent 0%, rgba(13, 13, 46, 0.7) 50%, rgba(13, 13, 46, 0.9) 100%);
+    z-index: 15;
+    pointer-events: none;
+    font-size: clamp(8px, 1.8vw, 11px);
+    color: #888;
+    line-height: 1.5;
+    font-family: 'Press Start 2P', cursive;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+#game-footer p {
+    margin: 0;
+    opacity: 0.8;
+}
+
+/* Ocultar footer durante el juego, mostrarlo en pantalla de inicio */
+body.game-running #game-footer {
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+#start-screen ~ #game-footer {
+    opacity: 1;
+}
