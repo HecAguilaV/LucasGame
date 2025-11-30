@@ -256,10 +256,36 @@ h1 {
     position: absolute;
     bottom: 0;
     left: 0;
-    height: 4px;
+    height: 6px;
     background: linear-gradient(90deg, #6c5ce7, #00d4ff);
     width: 0%;
     transition: width 0.3s ease;
     z-index: 20;
-    box-shadow: 0 0 10px rgba(108, 92, 231, 0.5);
+    box-shadow: 0 0 15px rgba(108, 92, 231, 0.8), 0 0 30px rgba(0, 212, 255, 0.5);
+}
+
+/* Indicador de distancia a la meta */
+#distance-indicator {
+    display: none;
+    font-family: 'Press Start 2P', cursive;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+@keyframes glow {
+    0% { 
+        filter: brightness(1);
+    }
+    100% { 
+        filter: brightness(1.5) drop-shadow(0 0 20px #00d4ff);
+    }
 }

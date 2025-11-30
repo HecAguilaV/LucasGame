@@ -57,11 +57,8 @@ export class Game {
         // Si el juego no está corriendo o está pausado, no actualizar
         if (!this.gameRunning || getIsPaused()) return;
         
-        // Si no hay vidas, detener completamente
-        if (this.lives <= 0) {
-            this.gameRunning = false;
-            return;
-        }
+        // Con vidas infinitas, nunca se detiene por falta de vidas
+        // (se mantiene la lógica por si en el futuro se quiere limitar)
 
         // Actualizar jugador
         this.player.update(CONFIG.GRAVITY, CONFIG.GAME_SPEED);
@@ -214,9 +211,15 @@ export class Game {
         // Prevenir múltiples llamadas
         if (getIsPaused()) return;
         
-        this.lives--;
+        // Con vidas infinitas, nunca se decrementan
+        // this.lives--; // Comentado para vidas infinitas
         updateLives(this.lives);
+
+        // Siempre mostrar mensaje de fallo y permitir continuar (vidas infinitas)
+        showFailMessage();
         
+        // Código de Game Over comentado (vidas infinitas)
+        /*
         if (this.lives > 0) {
             showFailMessage();
         } else {

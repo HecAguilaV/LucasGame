@@ -23,10 +23,10 @@ export const CONFIG = {
     PHONE_NUMBER: phoneNumber,
     
     // Configuración del juego
-    GAME_SPEED: 4,
+    GAME_SPEED: 2.5, // Reducido para móvil (era 4)
     GRAVITY: 0.6,
     FINAL_DISTANCE: 12000, // Juego más largo
-    LIVES: 3, // Número de vidas
+    LIVES: Infinity, // Vidas infinitas
     
     // Configuración del jugador
     PLAYER: {

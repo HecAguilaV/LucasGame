@@ -103,16 +103,17 @@ export function showModal(text, isDeath, isFinal) {
         };
         actions.appendChild(restartBtn);
             } else if (isDeath) {
-                // Botón Reintentar (solo si hay vidas)
+                // Botón Reintentar (siempre disponible con vidas infinitas)
                 const livesEl = document.getElementById('lives-display');
-                const lives = livesEl ? parseInt(livesEl.innerText) || 0 : 0;
+                const livesText = livesEl ? livesEl.innerText : '∞';
+                const isInfinite = livesText === '∞' || livesText === 'Infinity';
                 
-                if (lives > 0) {
-                    const btn = document.createElement('button');
-                    btn.className = "action-btn";
-                    btn.style.background = "linear-gradient(135deg, #ff0055 0%, #ff3366 100%)";
-                    btn.style.color = "white";
-                    btn.innerText = `CONTINUAR (${lives} vidas restantes)`;
+                // Siempre mostrar botón de continuar (vidas infinitas)
+                const btn = document.createElement('button');
+                btn.className = "action-btn";
+                btn.style.background = "linear-gradient(135deg, #ff0055 0%, #ff3366 100%)";
+                btn.style.color = "white";
+                btn.innerText = isInfinite ? "CONTINUAR (∞ VIDAS)" : `CONTINUAR (${livesText} vidas restantes)`;
                     btn.onclick = () => {
                         modal.style.display = 'none';
                         isPaused = false;
@@ -120,17 +121,6 @@ export function showModal(text, isDeath, isFinal) {
                         window.dispatchEvent(new CustomEvent('playerRespawn'));
                     };
                     actions.appendChild(btn);
-                } else {
-                    const btn = document.createElement('button');
-                    btn.className = "action-btn";
-                    btn.style.background = "linear-gradient(135deg, #ff0055 0%, #ff3366 100%)";
-                    btn.style.color = "white";
-                    btn.innerText = "REINICIAR JUEGO";
-                    btn.onclick = () => {
-                        location.reload();
-                    };
-                    actions.appendChild(btn);
-                }
                 
                 // Siempre agregar botón de reinicio de emergencia
                 const emergencyBtn = document.createElement('button');
@@ -143,17 +133,17 @@ export function showModal(text, isDeath, isFinal) {
                     location.reload();
                 };
                 actions.appendChild(emergencyBtn);
-    } else {
-        // Botón Continuar (Historia)
-        const btn = document.createElement('button');
-        btn.className = "action-btn";
-        btn.innerText = "CONTINUAR >>";
-        btn.onclick = () => {
-            modal.style.display = 'none';
-            isPaused = false;
-        };
-        actions.appendChild(btn);
-    }
+            } else {
+                // Botón Continuar (Historia)
+                const btn = document.createElement('button');
+                btn.className = "action-btn";
+                btn.innerText = "CONTINUAR >>";
+                btn.onclick = () => {
+                    modal.style.display = 'none';
+                    isPaused = false;
+                };
+                actions.appendChild(btn);
+            }
     modal.style.display = 'block';
     return false;
 }
@@ -195,11 +185,52 @@ export function checkStoryMessages(playerX) {
 }
 
 /**
- * Actualiza la barra de progreso
+ * Actualiza la barra de progreso y muestra indicador de distancia
  */
 export function updateProgressBar(progress) {
     const progressBar = document.getElementById('progress-bar');
     progressBar.style.width = Math.min(100, progress) + '%';
+    
+    // Actualizar indicador de distancia restante
+    let distanceIndicator = document.getElementById('distance-indicator');
+    if (!distanceIndicator) {
+        // Crear indicador si no existe
+        const uiLayer = document.getElementById('ui-layer');
+        distanceIndicator = document.createElement('div');
+        distanceIndicator.id = 'distance-indicator';
+        distanceIndicator.className = 'ui-section';
+        distanceIndicator.style.textAlign = 'center';
+        distanceIndicator.style.position = 'absolute';
+        distanceIndicator.style.top = '50%';
+        distanceIndicator.style.left = '50%';
+        distanceIndicator.style.transform = 'translate(-50%, -50%)';
+        distanceIndicator.style.zIndex = '15';
+        distanceIndicator.style.pointerEvents = 'none';
+        uiLayer.appendChild(distanceIndicator);
+    }
+    
+    const remaining = Math.max(0, 100 - progress);
+    
+    // Mostrar indicador cuando queda menos del 30%
+    if (remaining <= 30) {
+        distanceIndicator.style.display = 'block';
+        const distance = Math.ceil((remaining / 100) * 12000 / 100); // En cientos de metros
+        distanceIndicator.innerHTML = `
+            <div style="font-size: clamp(16px, 4vw, 24px); color: #00d4ff; text-shadow: 0 0 20px #00d4ff, 0 0 30px #6c5ce7, 2px 2px 0 #000; animation: pulse 1s infinite;">
+                ${remaining <= 10 ? '🎯' : remaining <= 20 ? '✨' : '🌟'} META CERCA
+            </div>
+            <div style="font-size: clamp(12px, 3vw, 18px); color: #6c5ce7; margin-top: 5px; text-shadow: 0 0 10px #6c5ce7, 2px 2px 0 #000;">
+                ${distance > 0 ? distance + '00m' : '¡CASI LLEGAS!'}
+            </div>
+        `;
+        
+        // Efecto de brillo cuando está muy cerca
+        if (remaining <= 10) {
+            distanceIndicator.style.animation = 'glow 0.5s infinite alternate';
+        }
+    } else {
+        distanceIndicator.style.display = 'none';
+    }
 }
 
 /**
@@ -223,13 +254,19 @@ export function updateLives(lives) {
         livesSection.style.textAlign = 'center';
         livesSection.innerHTML = `
             <div class="ui-label">VIDAS</div>
-            <div id="lives-display" class="ui-value">${lives}</div>
+            <div id="lives-display" class="ui-value">∞</div>
         `;
         uiLayer.appendChild(livesSection);
         livesDisplay = document.getElementById('lives-display');
     }
-    livesDisplay.innerText = lives;
-    livesDisplay.style.color = lives > 1 ? '#00d2ff' : '#ff0055';
+    // Mostrar infinito si las vidas son infinitas
+    if (lives === Infinity || lives > 999) {
+        livesDisplay.innerText = '∞';
+        livesDisplay.style.color = '#00d4ff';
+    } else {
+        livesDisplay.innerText = lives;
+        livesDisplay.style.color = lives > 1 ? '#00d2ff' : '#ff0055';
+    }
 }
 
 /**
