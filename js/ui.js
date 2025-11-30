@@ -122,18 +122,6 @@ export function showModal(text, isDeath, isFinal) {
                         window.dispatchEvent(new CustomEvent('playerRespawn'));
                     };
                     actions.appendChild(btn);
-                
-                // Siempre agregar botón de reinicio de emergencia
-                const emergencyBtn = document.createElement('button');
-                emergencyBtn.className = "action-btn";
-                emergencyBtn.style.background = "linear-gradient(135deg, #666 0%, #888 100%)";
-                emergencyBtn.style.color = "white";
-                emergencyBtn.style.marginTop = "10px";
-                emergencyBtn.innerText = "🔄 REINICIAR (EMERGENCIA)";
-                emergencyBtn.onclick = () => {
-                    location.reload();
-                };
-                actions.appendChild(emergencyBtn);
             } else {
                 // Botón Continuar (Historia)
                 const btn = document.createElement('button');
