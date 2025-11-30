@@ -30,9 +30,9 @@ export const CONFIG = {
     
     // Configuración del jugador
     PLAYER: {
-        SIZE: 25,
-        JUMP_POWER: -18, // Aumentado para saltar más lejos y cruzar gaps más fácilmente
-        MAX_TRAIL_LENGTH: 15
+        SIZE: 30, // Más grande para verse mejor
+        JUMP_POWER: -17, // Balanceado
+        MAX_TRAIL_LENGTH: 25 // Trail más largo y épico
     },
     
     // Configuración visual - TEMA ESPACIAL/CÓSMICO

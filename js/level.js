@@ -12,18 +12,23 @@ let ramps = []; // Rampas que impulsan hacia arriba
 let meteors = []; // Meteoritos
 
 /**
- * Inicializa las estrellas de fondo (muchas más estrellas)
+ * Inicializa las estrellas de fondo - VERSION ÉPICA
  */
 export function initStars() {
     stars = [];
-    // Muchas más estrellas para efecto espacial
-    for (let i = 0; i < 300; i++) {
+    // MUCHAS más estrellas para efecto espacial épico
+    for (let i = 0; i < 500; i++) {
+        const layer = Math.random(); // Capa para parallax
         stars.push({
             x: Math.random() * CONFIG.FINAL_DISTANCE * 2,
             y: Math.random() * window.innerHeight,
-            size: Math.random() * 3 + 0.5,
-            brightness: Math.random(),
-            twinkle: Math.random() * Math.PI * 2 // Para efecto de parpadeo
+            size: 0.5 + Math.random() * (layer > 0.8 ? 4 : 2), // Algunas estrellas más grandes
+            brightness: 0.3 + Math.random() * 0.7,
+            twinkle: Math.random() * Math.PI * 2,
+            twinkleSpeed: 0.02 + Math.random() * 0.1, // Velocidad de parpadeo variable
+            layer: layer, // Para efecto parallax
+            hue: Math.random() > 0.7 ? Math.random() * 60 + 200 : 0, // Algunas estrellas coloridas
+            pulsePhase: Math.random() * Math.PI * 2
         });
     }
 }
@@ -224,60 +229,114 @@ export function getStars() {
 }
 
 /**
- * Dibuja el fondo con estrellas
+ * Dibuja el fondo ÉPICO con estrellas y efectos cósmicos
  */
 export function drawBackground(ctx, cameraX) {
-    // Fondo con gradiente
-    const gradient = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
-    gradient.addColorStop(0, CONFIG.COLORS.BACKGROUND_START);
-    gradient.addColorStop(1, CONFIG.COLORS.BACKGROUND_END);
+    const time = Date.now() * 0.001;
+    const width = ctx.canvas.width;
+    const height = ctx.canvas.height;
+    
+    // Fondo con gradiente dinámico
+    const gradient = ctx.createLinearGradient(0, 0, 0, height);
+    const hueShift = Math.sin(time * 0.1) * 10;
+    gradient.addColorStop(0, `hsl(${240 + hueShift}, 70%, 8%)`);
+    gradient.addColorStop(0.5, `hsl(${260 + hueShift}, 60%, 12%)`);
+    gradient.addColorStop(1, `hsl(${280 + hueShift}, 50%, 10%)`);
     ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.fillRect(0, 0, width, height);
+    
+    // NEBULOSAS ÉPICAS de fondo
+    for (let i = 0; i < 3; i++) {
+        const nebulaX = (width * 0.3 + i * width * 0.4 - cameraX * 0.02) % (width * 1.5);
+        const nebulaY = height * (0.2 + i * 0.25);
+        const nebulaSize = 200 + i * 100;
+        
+        const nebulaGradient = ctx.createRadialGradient(
+            nebulaX, nebulaY, 0,
+            nebulaX, nebulaY, nebulaSize
+        );
+        const nebulaHue = (time * 5 + i * 60) % 360;
+        nebulaGradient.addColorStop(0, `hsla(${nebulaHue}, 80%, 50%, 0.15)`);
+        nebulaGradient.addColorStop(0.5, `hsla(${nebulaHue + 30}, 70%, 40%, 0.08)`);
+        nebulaGradient.addColorStop(1, 'transparent');
+        
+        ctx.fillStyle = nebulaGradient;
+        ctx.fillRect(0, 0, width, height);
+    }
 
-    // Estrellas brillantes (tema espacial) - Muchas más estrellas
+    // ESTRELLAS ÉPICAS con parallax multicapa
     stars.forEach(s => {
-        let screenX = s.x - cameraX * 0.1; // Movimiento parallax lento
-        if (screenX < -50) screenX += CONFIG.FINAL_DISTANCE * 2;
-        if (screenX > ctx.canvas.width + 50) screenX -= CONFIG.FINAL_DISTANCE * 2;
+        // Parallax basado en la capa
+        const parallaxSpeed = 0.05 + s.layer * 0.15;
+        let screenX = s.x - cameraX * parallaxSpeed;
         
-        // Efecto de parpadeo
-        s.twinkle += 0.1;
-        const twinkleBrightness = 0.5 + Math.sin(s.twinkle) * 0.3;
-        const brightness = (0.6 + s.brightness * 0.4) * twinkleBrightness;
-        ctx.globalAlpha = brightness;
+        // Wrap around
+        const wrapWidth = CONFIG.FINAL_DISTANCE * 2;
+        if (screenX < -50) screenX += wrapWidth;
+        if (screenX > width + 50) screenX -= wrapWidth;
         
-        // Colores variados para estrellas (blancas, azules, púrpuras, cianes)
-        const starColors = ['#ffffff', '#00d4ff', '#6c5ce7', '#8b5cf6', '#a29bfe', '#74b9ff'];
-        const starColor = starColors[Math.floor(s.brightness * starColors.length)];
+        // Efecto de parpadeo mejorado
+        s.twinkle += s.twinkleSpeed;
+        const twinkleBrightness = 0.5 + Math.sin(s.twinkle) * 0.4;
+        const pulseBrightness = 1 + Math.sin(time * 3 + s.pulsePhase) * 0.2;
+        const brightness = s.brightness * twinkleBrightness * pulseBrightness;
+        
+        ctx.globalAlpha = Math.min(1, brightness);
+        
+        // Color de la estrella
+        let starColor;
+        if (s.hue > 0) {
+            starColor = `hsl(${s.hue}, 80%, ${70 + brightness * 20}%)`;
+        } else {
+            starColor = `hsl(0, 0%, ${80 + brightness * 20}%)`;
+        }
         ctx.fillStyle = starColor;
         
-        // Dibujar estrella con efecto de brillo
-        ctx.shadowBlur = 2 + s.brightness * 3;
+        // Brillo de la estrella
+        const glowSize = s.size * (1 + brightness * 0.5);
+        ctx.shadowBlur = 5 + s.layer * 10;
         ctx.shadowColor = starColor;
-        ctx.fillRect(screenX, s.y, s.size, s.size);
         
-        // Estrellas grandes con cruz
-        if (s.size > 1.5) {
-            ctx.strokeStyle = starColor;
-            ctx.lineWidth = 0.5;
+        // Dibujar estrella
+        if (s.size > 2.5) {
+            // Estrellas grandes: dibujar con rayos
             ctx.beginPath();
-            ctx.moveTo(screenX + s.size/2, s.y);
-            ctx.lineTo(screenX + s.size/2, s.y + s.size);
-            ctx.moveTo(screenX, s.y + s.size/2);
-            ctx.lineTo(screenX + s.size, s.y + s.size/2);
-            ctx.stroke();
+            const rays = 4;
+            for (let j = 0; j < rays * 2; j++) {
+                const angle = (j / (rays * 2)) * Math.PI * 2;
+                const len = j % 2 === 0 ? glowSize * 2 : glowSize * 0.5;
+                const px = screenX + Math.cos(angle) * len;
+                const py = s.y + Math.sin(angle) * len;
+                if (j === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+            ctx.fill();
+        } else {
+            // Estrellas pequeñas: círculos simples
+            ctx.beginPath();
+            ctx.arc(screenX, s.y, glowSize, 0, Math.PI * 2);
+            ctx.fill();
         }
+        
         ctx.shadowBlur = 0;
     });
     ctx.globalAlpha = 1;
     
-    // Efecto de nebulosa sutil
-    const nebulaGradient = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
-    nebulaGradient.addColorStop(0, 'rgba(139, 92, 246, 0.1)');
-    nebulaGradient.addColorStop(0.5, 'rgba(108, 92, 231, 0.05)');
-    nebulaGradient.addColorStop(1, 'rgba(0, 212, 255, 0.1)');
-    ctx.fillStyle = nebulaGradient;
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    // LÍNEAS DE VELOCIDAD (efecto de movimiento)
+    const speedLines = 15;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < speedLines; i++) {
+        const lineY = (height / speedLines) * i + (time * 50 + i * 17) % height;
+        const lineLength = 50 + Math.random() * 100;
+        const lineX = (cameraX * 2 + i * 200) % width;
+        
+        ctx.beginPath();
+        ctx.moveTo(lineX, lineY);
+        ctx.lineTo(lineX - lineLength, lineY);
+        ctx.stroke();
+    }
     
     // Dibujar meteoritos
     drawMeteors(ctx, cameraX);

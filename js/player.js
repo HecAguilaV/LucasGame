@@ -127,62 +127,130 @@ export class Player {
     }
 
     /**
-     * Dibuja el jugador en el canvas con la imagen de Lucas
+     * Dibuja el jugador en el canvas con la imagen de Lucas - VERSION ÉPICA
      */
     draw(ctx) {
-        // Trail del jugador con colores neón
+        const time = Date.now() * 0.001;
+        
+        // TRAIL ÉPICO con efecto de fuego/energía cósmica
         this.trail.forEach((t, i) => {
             const progress = i / this.trail.length;
-            const hue = (Date.now() * 0.1 + progress * 60) % 360;
-            ctx.fillStyle = `hsla(${hue}, 100%, 60%, ${t.alpha * progress})`;
-            ctx.fillRect(t.x, t.y, this.size, this.size);
+            const size = this.size * (0.3 + progress * 0.7);
+            
+            // Colores de fuego cósmico que cambian
+            const hue1 = (time * 100 + progress * 120) % 360;
+            const hue2 = (hue1 + 60) % 360;
+            
+            // Efecto de llama
+            ctx.save();
+            ctx.globalAlpha = t.alpha * progress * 0.8;
+            
+            // Gradiente de fuego
+            const flameGradient = ctx.createRadialGradient(
+                t.x + size/2, t.y + size/2, 0,
+                t.x + size/2, t.y + size/2, size
+            );
+            flameGradient.addColorStop(0, `hsl(${hue1}, 100%, 80%)`);
+            flameGradient.addColorStop(0.5, `hsl(${hue2}, 100%, 60%)`);
+            flameGradient.addColorStop(1, `hsla(${hue1}, 100%, 40%, 0)`);
+            
+            ctx.fillStyle = flameGradient;
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = `hsl(${hue1}, 100%, 70%)`;
+            
+            // Forma ondulante para el trail
+            ctx.beginPath();
+            const wobble = Math.sin(time * 10 + i) * 3;
+            ctx.arc(t.x + size/2 + wobble, t.y + size/2, size/2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.restore();
         });
+
+        // AURA EXTERIOR BRILLANTE
+        ctx.save();
+        const auraSize = this.size + 15 + Math.sin(time * 5) * 5;
+        const auraGradient = ctx.createRadialGradient(
+            this.x + this.size/2, this.y + this.size/2, this.size/2,
+            this.x + this.size/2, this.y + this.size/2, auraSize
+        );
+        const auraHue = (time * 50) % 360;
+        auraGradient.addColorStop(0, `hsla(${auraHue}, 100%, 60%, 0.3)`);
+        auraGradient.addColorStop(0.5, `hsla(${auraHue + 60}, 100%, 50%, 0.15)`);
+        auraGradient.addColorStop(1, 'transparent');
+        
+        ctx.fillStyle = auraGradient;
+        ctx.beginPath();
+        ctx.arc(this.x + this.size/2, this.y + this.size/2, auraSize, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
 
         // Si las imágenes están cargadas, dibujar la imagen de Lucas
         if (this.imagesLoaded) {
             const currentImage = this.getCurrentImage();
             
-            // Borde brillante cósmico
-            ctx.shadowBlur = 25;
-            ctx.shadowColor = '#6c5ce7';
-            ctx.strokeStyle = '#6c5ce7';
-            ctx.lineWidth = 3;
-            ctx.strokeRect(this.x - 2, this.y - 2, this.size + 4, this.size + 4);
+            // BORDE EXTERIOR ÉPICO con pulso
+            const pulseSize = 4 + Math.sin(time * 8) * 2;
+            ctx.shadowBlur = 30 + Math.sin(time * 6) * 10;
+            ctx.shadowColor = '#ff0055';
+            ctx.strokeStyle = '#ff0055';
+            ctx.lineWidth = pulseSize;
+            ctx.strokeRect(this.x - 4, this.y - 4, this.size + 8, this.size + 8);
             
-            // Segundo borde interior
+            // BORDE INTERMEDIO neón
+            ctx.shadowColor = '#00d4ff';
             ctx.strokeStyle = '#00d4ff';
-            ctx.lineWidth = 1;
-            ctx.strokeRect(this.x, this.y, this.size, this.size);
+            ctx.lineWidth = 2;
+            ctx.strokeRect(this.x - 1, this.y - 1, this.size + 2, this.size + 2);
             ctx.shadowBlur = 0;
 
-            // Dibujar la imagen de Lucas
+            // Dibujar la imagen de Lucas con clip redondeado
             ctx.save();
-            // Efecto de brillo sutil
-            ctx.globalAlpha = 0.95;
+            ctx.beginPath();
+            ctx.roundRect(this.x, this.y, this.size, this.size, 4);
+            ctx.clip();
             ctx.drawImage(currentImage, this.x, this.y, this.size, this.size);
-            ctx.globalAlpha = 1;
             ctx.restore();
 
-            // Efecto de brillo superior
-            const gradient = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.size / 2);
-            gradient.addColorStop(0, 'rgba(108, 92, 231, 0.4)');
-            gradient.addColorStop(1, 'rgba(108, 92, 231, 0)');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(this.x, this.y, this.size, this.size / 2);
+            // EFECTO DE BRILLO SUPERIOR épico
+            const shineGradient = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.size);
+            shineGradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+            shineGradient.addColorStop(0.3, 'rgba(108, 92, 231, 0.2)');
+            shineGradient.addColorStop(1, 'rgba(0, 0, 0, 0.1)');
+            ctx.fillStyle = shineGradient;
+            ctx.fillRect(this.x, this.y, this.size, this.size);
+            
+            // PARTÍCULAS DE ENERGÍA alrededor del jugador
+            for (let i = 0; i < 6; i++) {
+                const angle = time * 3 + i * Math.PI / 3;
+                const dist = this.size * 0.8 + Math.sin(time * 5 + i) * 5;
+                const px = this.x + this.size/2 + Math.cos(angle) * dist;
+                const py = this.y + this.size/2 + Math.sin(angle) * dist;
+                
+                ctx.fillStyle = `hsl(${(time * 100 + i * 60) % 360}, 100%, 70%)`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = ctx.fillStyle;
+                ctx.beginPath();
+                ctx.arc(px, py, 3 + Math.sin(time * 8 + i) * 1.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.shadowBlur = 0;
+            
         } else {
-            // Fallback: dibujar cubo con gradiente mientras cargan las imágenes
-            const gradient = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.size);
+            // Fallback: cubo ÉPICO mientras cargan las imágenes
+            const gradient = ctx.createLinearGradient(this.x, this.y, this.x + this.size, this.y + this.size);
             gradient.addColorStop(0, '#00d2ff');
-            gradient.addColorStop(0.5, '#ff0055');
-            gradient.addColorStop(1, '#ff00ff');
+            gradient.addColorStop(0.3, '#ff0055');
+            gradient.addColorStop(0.6, '#ff00ff');
+            gradient.addColorStop(1, '#6c5ce7');
             
             ctx.fillStyle = gradient;
-            ctx.shadowBlur = 25;
-            ctx.shadowColor = '#00d2ff';
+            ctx.shadowBlur = 35;
+            ctx.shadowColor = '#ff0055';
             ctx.fillRect(this.x, this.y, this.size, this.size);
             
             ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 3;
             ctx.strokeRect(this.x, this.y, this.size, this.size);
             ctx.shadowBlur = 0;
         }
