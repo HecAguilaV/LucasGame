@@ -81,7 +81,8 @@ export function showModal(text, isDeath, isFinal) {
             btn.className = "action-btn wa-btn";
             btn.innerText = "💬 HABLAR CON PAPÁ";
             // Usar wa.me que abre la app si está instalada, o la web si no
-            btn.href = `https://wa.me/${currentPhone}?text=Hola%20pa,%20llegué%20al%20final%20del%20juego.%20Gracias%20por%20todo.`;
+            const mensaje = encodeURIComponent("Hola Papá, llegué al final del juego, al inicio de esta nueva etapa.\n\nEste es mi nuevo número para que hablemos.");
+            btn.href = `https://wa.me/${currentPhone}?text=${mensaje}`;
             btn.target = "_blank";
             btn.rel = "noopener noreferrer";
             // Asegurar que funcione en móvil
