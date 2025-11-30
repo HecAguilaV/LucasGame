@@ -98,10 +98,18 @@ body {
     pointer-events: auto;
 }
 
-#start-screen h1,
-#start-screen .subtitle {
+#start-screen h1 {
     width: 100%;
     max-width: 100%;
+    text-align: center;
+}
+
+#start-screen .subtitle {
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 @keyframes fadeIn {
@@ -139,7 +147,7 @@ h1 {
     font-family: inherit;
     font-size: clamp(12px, 3vw, 16px);
     cursor: pointer;
-    margin: 20px 0 0 0;
+    margin: 20px auto 0 auto;
     border-radius: 8px;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -154,10 +162,10 @@ h1 {
     position: relative;
     min-height: 50px;
     min-width: 200px;
-    /* Asegurar que esté centrado - flexbox lo centrará automáticamente */
-    width: auto;
+    /* Asegurar que esté centrado */
+    display: block;
+    width: fit-content;
     max-width: 90%;
-    align-self: center;
 }
 
 #start-btn:hover {
