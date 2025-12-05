@@ -108,7 +108,7 @@ Si usas VS Code:
    - ⚠️ **IMPORTANTE:** El nombre de la variable debe ser `PHONE_NUMBER` (NO `VERCEL_PHONE_NUMBER` porque Vercel reserva nombres con "VERCEL")
    - El archivo `.env` debe contener:
      ```
-     PHONE_NUMBER=56929868218
+     PHONE_NUMBER=numero de whatsapp
      ```
    - Luego impórtalo en Vercel
    - ✅ **Esta es la forma más fácil y funciona perfectamente**
